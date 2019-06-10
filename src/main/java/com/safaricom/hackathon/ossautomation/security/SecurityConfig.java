@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 
@@ -33,27 +34,37 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/oss-automation/v1/auth/signin").permitAll()
-                .antMatchers(HttpMethod.GET, "/oss-automation/v1/films/**").permitAll()
-                .antMatchers(HttpMethod.DELETE, "/oss-automation/v1/films/**").hasRole("ADMIN")
-                .antMatchers(HttpMethod.GET, "/oss-automation/v1/films/**").permitAll()
-                .antMatchers(HttpMethod.POST, "/oss-automation/v1/films/**").permitAll()
-                .antMatchers(HttpMethod.PUT, "/oss-automation/v1/films/**").permitAll()
-                .antMatchers(HttpMethod.GET, "/oss-automation/v1/video/**").permitAll()
-                .antMatchers(HttpMethod.DELETE, "/oss-automation/v1/video/**").hasRole("ADMIN")
-                .antMatchers(HttpMethod.GET, "/oss-automation/v1/video/**").permitAll()
-                .antMatchers(HttpMethod.PUT, "/oss-automation/v1/video/**").hasRole("ADMIN")
-                .antMatchers(HttpMethod.POST, "/oss-automation/v1/video/**").hasRole("ADMIN")
-                .antMatchers(HttpMethod.GET, "/oss-automation/v1/users/**").permitAll()
-                .antMatchers(HttpMethod.DELETE, "/oss-automation/v1/users/**").hasRole("ADMIN")
-                .antMatchers(HttpMethod.GET, "/oss-automation/v1/users/**").permitAll()
-                .antMatchers(HttpMethod.PUT, "/oss-automation/v1/users/**").hasRole("ADMIN")
-                .antMatchers(HttpMethod.POST, "/oss-automation/v1/users/**").hasRole("ADMIN")
+                .antMatchers("/auth/signin").permitAll()
+                .antMatchers(HttpMethod.GET, "/films/**").permitAll()
+                .antMatchers(HttpMethod.DELETE, "/films/**").hasRole("ADMIN")
+                .antMatchers(HttpMethod.GET, "/films/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/films/**").permitAll()
+                .antMatchers(HttpMethod.PUT, "/films/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/video/**").permitAll()
+                .antMatchers(HttpMethod.DELETE, "/video/**").hasRole("ADMIN")
+                .antMatchers(HttpMethod.GET, "/video/**").permitAll()
+                .antMatchers(HttpMethod.PUT, "/video/**").hasRole("ADMIN")
+                .antMatchers(HttpMethod.POST, "/video/**").hasRole("ADMIN")
+                .antMatchers(HttpMethod.GET, "/users/**").permitAll()
+                .antMatchers(HttpMethod.DELETE, "/users/**").hasRole("ADMIN")
+                .antMatchers(HttpMethod.GET, "/users/**").permitAll()
+                .antMatchers(HttpMethod.PUT, "/users/**").hasRole("ADMIN")
+                .antMatchers(HttpMethod.POST, "/users/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .apply(new JwtConfigurer(jwtTokenProvider));
         //@formatter:on
     }
 
+    @Override
+    public void configure(WebSecurity web)  {
+        web.ignoring().antMatchers("/v2/api-docs",
+                "/configuration/ui",
+                "/swagger-resources",
+                "/configuration/security",
+                "/swagger-ui.html",
+                "/webjars/**",
+                "/actuator/**");
+    }
 
 }

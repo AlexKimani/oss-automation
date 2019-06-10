@@ -8,7 +8,6 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -18,6 +17,10 @@ import static java.util.stream.Collectors.toList;
 
 @Entity
 @Table(name = "users", schema = "oss_automation")
+//@Data
+//@Builder
+//@NoArgsConstructor
+//@AllArgsConstructor
 public class Users extends AuditModel implements UserDetails {
     @EmbeddedId
     private UserIdentifier userCode;
@@ -122,22 +125,22 @@ public class Users extends AuditModel implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return true;
     }
 
     public void setUsername(String username) {

@@ -1,4 +1,3 @@
-From tomcat:8.0.51-jre8-alpine
-RUN rm -rf /usr/local/tomcat/webapps/*
-COPY ./target/oss-automation.war /usr/local/tomcat/webapps/ROOT.war
-CMD ["catalina.sh","run"]
+FROM java:8
+COPY oss-automation.war app.war
+CMD ["java", "-jar", "-Dspring.profiles.active=default", "/app.war"]

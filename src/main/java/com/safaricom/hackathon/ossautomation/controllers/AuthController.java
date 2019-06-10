@@ -11,6 +11,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,7 +39,11 @@ public class AuthController {
     public ResponseEntity signin(@RequestBody AuthenticationRequest data) {
 
         try {
+            System.out.println("You reached this line.....");
             String username = data.getUsername();
+            // Create an encoder with strength 16
+            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(16);
+            String result = encoder.encode(data.getPassword());
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, data.getPassword()));
             UserIdentifier userIdentifier = new UserIdentifier();
             userIdentifier.setUserCode(username);
